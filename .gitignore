@@ -1,0 +1,14 @@
+# Java
+*.class
+*.jar
+
+# Eclipse
+bin/
+
+# VSCode
+.vscode/
+
+#IntelliJ
+.idea/
+out/
+*.iml
