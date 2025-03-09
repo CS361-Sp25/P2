@@ -3,6 +3,7 @@ package fa.nfa;
 import fa.State;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Set;
  * @author Jayce Lowry
  */
 public class NFAState extends State {
-    private HashMap<Character, Set<NFAState>> transitions;
+    private Map<Character, Set<NFAState>> transitions;
 
     /**
      * Creates a new NFAState
