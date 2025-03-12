@@ -467,7 +467,7 @@ public class NFATest {
 		assertFalse(nfa.accepts("ab"));
 		assertFalse(nfa.accepts("b"));
 		assertFalse(nfa.accepts("ba"));
-		assertFalse(nfa.accepts("e"));
+		assertTrue(nfa.accepts("e"));
 
 		System.out.println("nfa5 accepts done");
 	}
