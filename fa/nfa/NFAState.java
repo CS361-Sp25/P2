@@ -39,7 +39,12 @@ public class NFAState extends State {
         if (transitionSet == null) {
             return;
         }
-        transitions.put(onSymb, transitionSet);
+        Set<NFAState> existingTransitions = transitions.get(onSymb);
+        if (existingTransitions == null) {
+            transitions.put(onSymb, transitionSet);
+        } else {
+            existingTransitions.addAll(transitionSet);
+        }
     }
 
     /**
