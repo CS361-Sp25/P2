@@ -4,11 +4,12 @@ import fa.State;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * TODO Docs
  *
- * @author Jayce Lowry
+ * @author Jayce Lowry and Chase Stombaugh
  */
 public class NFA implements NFAInterface {
     private Set<NFAState> states;
@@ -31,7 +32,10 @@ public class NFA implements NFAInterface {
      */
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        return Set.of();
+        if (from == null || !states.contains(from)) {
+            return Set.of();
+        }
+        return from.getTransitionSet(onSymb) != null ? from.getTransitionSet(onSymb) : Set.of();
     }
 
     /**
@@ -39,7 +43,20 @@ public class NFA implements NFAInterface {
      */
     @Override
     public Set<NFAState> eClosure(NFAState s) {
-        return Set.of();
+        Set<NFAState> closure = new LinkedHashSet<>();
+        Stack<NFAState> stack = new Stack<>();
+        stack.push(s);
+
+        while (!stack.isEmpty()) {
+            NFAState current = stack.pop();
+            if (closure.add(current)) { // Add state if not already visited
+                Set<NFAState> epsilonTransitions = current.getTransitionSet('e');
+                if (epsilonTransitions != null) {
+                    stack.addAll(epsilonTransitions);
+                }
+            }
+        }
+        return closure;
     }
 
     /**
@@ -47,7 +64,26 @@ public class NFA implements NFAInterface {
      */
     @Override
     public int maxCopies(String s) {
-        return 0;
+        if (startState == null) return 0;
+
+        Set<NFAState> currentStates = eClosure(startState);
+        int maxCopies = currentStates.size();
+
+        for (char symbol : s.toCharArray()) {
+            Set<NFAState> nextStates = new LinkedHashSet<>();
+            for (NFAState state : currentStates) {
+                Set<NFAState> transitions = state.getTransitionSet(symbol);
+                if (transitions != null) {
+                    for (NFAState t : transitions) {
+                        nextStates.addAll(eClosure(t));
+                    }
+                }
+            }
+            currentStates = nextStates;
+            maxCopies = Math.max(maxCopies, currentStates.size());
+        }
+
+        return maxCopies;
     }
 
     /**
@@ -55,7 +91,22 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
-        return false;
+        NFAState from = getState(fromState);
+        if (from == null || !alphabet.contains(onSymb) && onSymb != 'e') {
+            return false; // state is invalid or the symbol isn't in the alphabet
+        }
+
+        Set<NFAState> toStateObjects = new LinkedHashSet<>();
+        for (String name : toStates) {
+            NFAState state = getState(name);
+            if (state == null) {
+                return false; // one of the toStates doesn't exist
+            }
+            toStateObjects.add(state);   
+        }
+        
+        from.setTransitions(toStateObjects, onSymb);
+        return true;
     }
 
     /**
@@ -63,7 +114,18 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean isDFA() {
-        return false;
+        for (NFAState state : states) {
+            if (state.getTransitionSet('e') != null) {
+                return false; // epsilon transitions
+            }
+            for (char symbol : alphabet) {
+                Set<NFAState> transitions = state.getTransitionSet(symbol);
+                if (transitions != null && transitions.size() > 1) {
+                    return false; // More than one transition per symbol
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -121,6 +183,28 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean accepts(String s) {
+        if (startState == null) return false;
+
+        Set<NFAState> currentStates = eClosure(startState);
+
+        for (char symbol : s.toCharArray()) {
+            Set<NFAState> nextStates = new LinkedHashSet<>();
+            for (NFAState state : currentStates) {
+                Set<NFAState> transitions = state.getTransitionSet(symbol);
+                if (transitions != null) {
+                    for (NFAState t : transitions) {
+                        nextStates.addAll(eClosure(t));
+                    }
+                }
+            }
+            currentStates = nextStates;
+        }
+
+        for (NFAState state : currentStates) {
+            if (finalStates.contains(state)) {
+                return true;
+            }
+        }
         return false;
     }
 
