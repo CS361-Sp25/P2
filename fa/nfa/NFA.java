@@ -79,12 +79,15 @@ public class NFA implements NFAInterface {
      */
     @Override
     public int maxCopies(String s) {
-        if (startState == null) return 0;
+        if (startState == null || s == null) return 0;
 
         Set<NFAState> currentStates = eClosure(startState);
         int maxCopies = currentStates.size();
 
         for (char symbol : s.toCharArray()) {
+            if (symbol == 'e') {
+                continue;
+            }
             Set<NFAState> nextStates = new LinkedHashSet<>();
             for (NFAState state : currentStates) {
                 Set<NFAState> transitions = state.getTransitionSet(symbol);
@@ -198,11 +201,14 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean accepts(String s) {
-        if (startState == null) return false;
+        if (startState == null || s == null) return false;
 
         Set<NFAState> currentStates = eClosure(startState);
 
         for (char symbol : s.toCharArray()) {
+            if (symbol == 'e') { // Don't consume epsilon
+                continue;
+            }
             Set<NFAState> nextStates = new LinkedHashSet<>();
             for (NFAState state : currentStates) {
                 Set<NFAState> transitions = state.getTransitionSet(symbol);
