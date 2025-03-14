@@ -27,7 +27,7 @@ more complicated machines and then implemented them in the tester, but that appr
 was more time-consuming than what was practical, and it likely didn't catch as many of
 the edge cases that we actually care about. My second approach was to start with smaller
 machines and work out the possibilities, which I think made it easier and faster to write
-more tests.
+more tests and catch edge cases.
 
 ### Chase
 
@@ -56,7 +56,9 @@ confusion and workarounds.
 To compile the NFA implementation and test cases on the Onyx server, navigate to the 
 project's root directory and run:
 
-`javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java`
+```shell
+javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java
+```
 
 
 This will compile all necessary java files, including the NFA implementation and 
@@ -66,8 +68,9 @@ JUnit tests.
 
 To ensure the implementation is correct, run the JUnit test cases using:
 
-`java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar 
-org.junit.runner.JUnitCore test.nfa.NFATest`
+```shell
+java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar org.junit.runner.JUnitCore test.nfa.NFATest
+```
 
 
 This will execute all test cases, including:
