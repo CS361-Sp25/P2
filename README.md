@@ -6,13 +6,28 @@
 
 ## Overview
 
-// TODO Jayce
+This program models non-deterministic finite automata with the 5-tuple. Operations are
+defined for creating NFAs and testing their acceptance of strings.
 
 ## Reflection
 
 ### Jayce
 
-// TODO Jayce
+This project was certainly more complicated than implementing the DFA. However, I think
+our design choices for the DFA ultimately made it easier to determine where things would
+go for the NFA. For example, representing transitions was fairly trivial because now
+in each state, we just store a set of states in our HashMap rather than single states.
+I did realize that my first implementation was incorrect after studying the provided
+test suite and noticing that we need to union the transition sets when adding transitions,
+and not overwrite them.
+
+The other thing I was responsible for was writing additional unit test cases. I think
+the way I went about it at first was not very effective. I spent time drawing out
+more complicated machines and then implemented them in the tester, but that approach
+was more time-consuming than what was practical, and it likely didn't catch as many of
+the edge cases that we actually care about. My second approach was to start with smaller
+machines and work out the possibilities, which I think made it easier and faster to write
+more tests.
 
 ### Chase
 
@@ -44,7 +59,7 @@ project's root directory and run:
 `javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java`
 
 
-This will compile all necessary java files, including the NFA implementation and provided 
+This will compile all necessary java files, including the NFA implementation and 
 JUnit tests.
 
 ### Running
@@ -56,14 +71,15 @@ org.junit.runner.JUnitCore test.nfa.NFATest`
 
 
 This will execute all test cases, including:
-* State creation and transitions
+* NFA creation (including states and transitions)
+* NFA correctness testing
 * E-closure computation
 * String acceptance testing
 * Tracking maximum state copies
 * Validation of DFA properties
 
-If and only if all tests pass, the implementation correctly models an NFA with epsilon 
-transitions.
+These tests improve our confidence that the implementation correctly models 
+an NFA with epsilon transitions.
 
 ## Sources used
 
