@@ -7,9 +7,22 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- * TODO Docs
+ * Represents a Non-Deterministic Finite Automaton (NFA). This class provides
+ * methods for constructing and simulating an NFA, including adding states,
+ * defining transitions (including epsilon transitions), and determining
+ * string acceptance.
  *
- * @author Jayce Lowry and Chase Stombaugh
+ * The NFA is defined by:
+ * - A set of states
+ * - An input alphabet
+ * - A transition function
+ * - A start state
+ * - A set of accepting (final) states
+ *
+ * This implementation also includes methods to compute epsilon closures and
+ * simulate multi-state processing.
+ *
+ * @author Jayce Lowry, Chase Stombaugh
  */
 public class NFA implements NFAInterface {
     private Set<NFAState> states;
@@ -18,7 +31,9 @@ public class NFA implements NFAInterface {
     private Set<NFAState> finalStates;
 
     /**
-     * TODO Docs
+     * Constructs an empty NFA with no states or transitions.
+     * The alphabet, states, and final states are initialized
+     * as empty sets.
      */
     public NFA() {
         this.alphabet = new LinkedHashSet<>();
