@@ -351,6 +351,11 @@ public class NFATest {
 		assertFalse(nfa.isFinal("a"));
 		assertFalse(nfa.getSigma().contains('e'));
 
+		assertEquals(nfa.getToState(nfa.getState("a"), '0'), Set.of(nfa.getState("a")));
+		assertEquals(nfa.getToState(nfa.getState("a"), '1'), Set.of(nfa.getState("b")));
+		assertEquals(nfa.getToState(nfa.getState("b"), '0'), Set.of(nfa.getState("a")));
+		assertEquals(nfa.getToState(nfa.getState("b"), '1'), Set.of(nfa.getState("b")));
+
 		System.out.println("nfa4 correctness done");
 	}
 
@@ -443,6 +448,9 @@ public class NFATest {
 		assertFalse(nfa.isStart("b"));
 		assertFalse(nfa.isFinal("a"));
 		assertFalse(nfa.getSigma().contains('e'));
+
+		assertEquals(nfa.getToState(nfa.getState("a"), 'e'), Set.of(nfa.getState("b")));
+		assertEquals(nfa.getToState(nfa.getState("b"), 'e'), Set.of(nfa.getState("c")));
 
 		System.out.println("nfa5 correctness done");
 	}
@@ -546,6 +554,14 @@ public class NFATest {
 		assertTrue(nfa.isStart("R"));
 		assertTrue(nfa.isFinal("S"));
 		assertTrue(nfa.isFinal("U"));
+
+		assertEquals(nfa.getToState(nfa.getState("R"), '?'), Set.of(nfa.getState("R"), nfa.getState("T")));
+		assertEquals(nfa.getToState(nfa.getState("R"), '$'), Set.of(nfa.getState("S")));
+		assertEquals(nfa.getToState(nfa.getState("R"), 'e'), Set.of(nfa.getState("U")));
+		assertEquals(nfa.getToState(nfa.getState("S"), '%'), Set.of(nfa.getState("U")));
+		assertEquals(nfa.getToState(nfa.getState("S"), '$'), Set.of(nfa.getState("R")));
+		assertEquals(nfa.getToState(nfa.getState("T"), '%'), Set.of(nfa.getState("R")));
+		assertEquals(nfa.getToState(nfa.getState("U"), 'e'), Set.of(nfa.getState("R")));
 
 		System.out.println("nfa6 correctness done");
 	}
@@ -946,6 +962,9 @@ public class NFATest {
 		assertTrue(nfa.isStart("q0"));
 		assertTrue(nfa.isFinal("q0"));
 
+		assertEquals(nfa.getToState(nfa.getState("q0"), 'a'), Set.of(nfa.getState("q0")));
+
+
 		System.out.println("nfa11 correctness done");
 	}
 
@@ -1026,6 +1045,8 @@ public class NFATest {
 
 		assertTrue(nfa.isStart("q0"));
 		assertFalse(nfa.isFinal("q0"));
+
+		assertEquals(nfa.getToState(nfa.getState("q0"), 'a'), Set.of(nfa.getState("q0")));
 
 		System.out.println("nfa12 correctness done");
 	}
@@ -1118,6 +1139,12 @@ public class NFATest {
 		assertTrue(nfa.isStart("q0"));
 		assertTrue(nfa.isFinal("q2"));
 
+		assertEquals(nfa.getToState(nfa.getState("q0"), 'a'), Set.of(nfa.getState("q0")));
+		assertEquals(nfa.getToState(nfa.getState("q0"), 'e'), Set.of(nfa.getState("q1")));
+		assertEquals(nfa.getToState(nfa.getState("q1"), 'e'), Set.of(nfa.getState("q2")));
+		assertEquals(nfa.getToState(nfa.getState("q2"), 'b'), Set.of(nfa.getState("q2")));
+		assertEquals(nfa.getToState(nfa.getState("q2"), 'e'), Set.of(nfa.getState("q0")));
+
 		System.out.println("nfa13 correctness done");
 	}
 
@@ -1209,6 +1236,10 @@ public class NFATest {
 
 		assertTrue(nfa.isStart("q0"));
 		assertTrue(nfa.isFinal("q2"));
+
+		assertEquals(nfa.getToState(nfa.getState("q0"), 'a'), Set.of(nfa.getState("q1"), nfa.getState("q2")));
+		assertEquals(nfa.getToState(nfa.getState("q1"), 'a'), Set.of(nfa.getState("q1")));
+		assertEquals(nfa.getToState(nfa.getState("q2"), 'b'), Set.of(nfa.getState("q2")));
 
 		System.out.println("nfa14 correctness done");
 	}
@@ -1309,6 +1340,12 @@ public class NFATest {
 		assertTrue(nfa.isStart("q0"));
 		assertTrue(nfa.isFinal("q4"));
 
+		assertEquals(nfa.getToState(nfa.getState("q0"), 'a'), Set.of(nfa.getState("q1")));
+		assertEquals(nfa.getToState(nfa.getState("q1"), 'b'), Set.of(nfa.getState("q2")));
+		assertEquals(nfa.getToState(nfa.getState("q2"), 'b'), Set.of(nfa.getState("q3")));
+		assertEquals(nfa.getToState(nfa.getState("q3"), 'a'), Set.of(nfa.getState("q4")));
+		assertEquals(nfa.getToState(nfa.getState("q4"), 'e'), Set.of(nfa.getState("q0")));
+
 		System.out.println("nfa14 correctness done");
 	}
 
@@ -1404,6 +1441,8 @@ public class NFATest {
 
 		assertTrue(nfa.isStart("q0"));
 		assertTrue(nfa.isFinal("q1"));
+
+		assertEquals(nfa.getToState(nfa.getState("q0"), 'a'), Set.of(nfa.getState("q0")));
 
 		System.out.println("nfa16 correctness done");
 	}
